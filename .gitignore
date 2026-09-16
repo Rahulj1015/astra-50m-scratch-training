@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+checkpoints/
+data/raw/
+data/processed/
+*.pt
+*.pth
+*.safetensors
+.env
+
+# Keep model checkpoints in Git LFS for reproducible project archives.
+!checkpoints/
+!checkpoints/*.json
+!checkpoints/*.pt

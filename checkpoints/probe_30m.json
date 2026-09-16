@@ -1,0 +1,8 @@
+{
+  "parameters": 25302016,
+  "tokens": 43280,
+  "seconds": 0.65,
+  "device": "cuda",
+  "width": 512,
+  "layers": 8
+}

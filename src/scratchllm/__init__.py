@@ -1,0 +1,1 @@
+"""Local scratch-trained assistant runtime."""

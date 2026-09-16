@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astra Local AI</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">A</span><span>Astra</span></div>
+    <button class="new-chat" id="new-chat">+ New chat</button>
+    <div class="sidebar-label">LOCAL WORKSPACE</div>
+    <div class="history" id="history"><div class="history-item active">First conversation</div></div>
+    <div class="sidebar-bottom"><div class="status-dot"></div><span>Local model online</span></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><strong>Astra Local AI</strong><span class="model-pill">scratch-trained</span></div><button class="icon-button" title="Settings">...</button></header>
+    <section class="chat" id="chat">
+      <div class="welcome" id="welcome"><div class="welcome-mark">A</div><h1>What will we build today?</h1><p>A private experimental assistant running on your machine.</p></div>
+    </section>
+    <form class="composer" id="composer">
+      <textarea id="message" rows="1" placeholder="Message Astra..." required></textarea>
+      <button class="send" type="submit" title="Send message">&#8593;</button>
+      <div class="composer-meta"><span>Local inference · experimental model</span><span id="model-meta">Model: Astra · loading...</span></div>
+    </form>
+    <div class="disclaimer">Astra can make mistakes. Verify important information.</div>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
