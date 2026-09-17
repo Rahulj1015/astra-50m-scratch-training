@@ -2,17 +2,30 @@ const form = document.querySelector('#composer');
 const input = document.querySelector('#message');
 const chat = document.querySelector('#chat');
 const welcome = document.querySelector('#welcome');
+const statusText = document.querySelector('#status-text');
+const modelMeta = document.querySelector('#model-meta');
 let conversationId = null;
 
-fetch('/api/health')
-  .then((response) => response.json())
-  .then((data) => {
-    const meta = document.querySelector('#model-meta');
-    if (meta && data.parameters) {
-      meta.textContent = `Model: Astra · ${(data.parameters / 1000000).toFixed(1)}M params`;
+async function refreshHealth() {
+  try {
+    const response = await fetch('/api/health');
+    const data = await response.json();
+    const providerName = data.provider === 'ollama' ? 'Ollama' : (data.local_model_loaded ? 'Local scratch model' : 'Offline');
+    const modelLabel = data.model ? `Model: ${data.model}` : 'Model: Astra';
+    if (modelMeta) {
+      modelMeta.textContent = `${modelLabel} · ${providerName}`;
     }
-  })
-  .catch(() => {});
+    if (statusText) {
+      statusText.textContent = data.ollama_available ? 'Ollama online' : 'Local fallback active';
+    }
+    const dot = document.querySelector('.status-dot');
+    if (dot) dot.style.background = data.ollama_available ? '#3eaa69' : '#d0952d';
+  } catch (error) {
+    if (statusText) statusText.textContent = 'Status unavailable';
+  }
+}
+
+refreshHealth();
 
 function addMessage(role, text) {
   const row = document.createElement('div');
@@ -31,15 +44,16 @@ form.addEventListener('submit', async (event) => {
   welcome?.remove();
   input.value = '';
   addMessage('user', message);
-  const pending = addMessage('assistant', 'Thinking locally...');
+  const pending = addMessage('assistant', 'Thinking...');
   try {
     const response = await fetch('/api/chat', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({message, conversation_id: conversationId, temperature: 0.35}) });
     const data = await response.json();
     if (!response.ok) throw new Error(data.detail || 'Request failed');
     conversationId = data.conversation_id;
     pending.querySelector('.message-content').textContent = data.answer;
+    await refreshHealth();
   } catch (error) {
-    pending.querySelector('.message-content').textContent = `Local model error: ${error.message}`;
+    pending.querySelector('.message-content').textContent = `AI request failed: ${error.message}`;
   }
 });
 
